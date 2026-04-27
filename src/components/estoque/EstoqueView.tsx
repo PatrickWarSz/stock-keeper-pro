@@ -4,7 +4,7 @@ import { ItemEstoque } from "@/types";
 import { EpModal, EpButton } from "@/components/ui/EpModal";
 import { EpField, epInput } from "@/components/ui/EpField";
 import { HistoricoGeralModal } from "@/components/historico/HistoricoGeralModal";
-import { Plus, Settings, History, PlusCircle, MinusCircle, MoreHorizontal, Layers, CheckCircle2, AlertTriangle, XCircle, Pencil, Trash2 } from "lucide-react";
+import { Plus, Settings, History, PlusCircle, MinusCircle, MoreHorizontal, Layers, CheckCircle2, AlertTriangle, XCircle, Pencil, Trash2, List, FolderTree, Search, PackageOpen, Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { fmtDateTime } from "@/lib/format";
 
@@ -18,6 +18,8 @@ export function EstoqueView() {
   const [movItem, setMovItem] = useState<{ item: ItemEstoque; tipo: "entrada" | "saida" } | null>(null);
   const [histItem, setHistItem] = useState<ItemEstoque | null>(null);
   const [catFilter, setCatFilter] = useState<string>("");
+  const [viewMode, setViewMode] = useState<"lista" | "categoria">("lista");
+  const [catSearch, setCatSearch] = useState("");
 
   const dashboard = useMemo(() => {
     let garantido = 0, baixo = 0, zerado = 0;
@@ -30,6 +32,14 @@ export function EstoqueView() {
   }, [itens]);
 
   const filtered = catFilter ? itens.filter((i) => i.categoria_id === catFilter) : itens;
+
+  const categoriasFiltradas = useMemo(() => {
+    const term = catSearch.trim().toLowerCase();
+    if (!term) return categorias;
+    return categorias.filter((c) => c.nome.toLowerCase().includes(term));
+  }, [categorias, catSearch]);
+
+  const itensSemCategoria = useMemo(() => itens.filter((i) => !i.categoria_id), [itens]);
 
   return (
     <>
@@ -62,13 +72,46 @@ export function EstoqueView() {
       </div>
 
       <div className="flex gap-2 mb-4">
-        <select value={catFilter} onChange={(e) => setCatFilter(e.target.value)}
-          className="bg-[hsl(var(--surface-2))] border border-border rounded-lg px-3 py-2 text-sm">
-          <option value="">Todas as categorias</option>
-          {categorias.map((c) => <option key={c.id} value={c.id}>{c.nome}</option>)}
-        </select>
+        <div className="inline-flex bg-[hsl(var(--surface-2))] border border-border rounded-lg p-1">
+          <button
+            onClick={() => setViewMode("lista")}
+            className={cn(
+              "flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md transition-colors",
+              viewMode === "lista" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <List className="w-3.5 h-3.5" /> Lista
+          </button>
+          <button
+            onClick={() => setViewMode("categoria")}
+            className={cn(
+              "flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-md transition-colors",
+              viewMode === "categoria" ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            <FolderTree className="w-3.5 h-3.5" /> Por Categoria
+          </button>
+        </div>
+        {viewMode === "lista" ? (
+          <select value={catFilter} onChange={(e) => setCatFilter(e.target.value)}
+            className="bg-[hsl(var(--surface-2))] border border-border rounded-lg px-3 py-2 text-sm">
+            <option value="">Todas as categorias</option>
+            {categorias.map((c) => <option key={c.id} value={c.id}>{c.nome}</option>)}
+          </select>
+        ) : (
+          <div className="relative flex-1 max-w-xs">
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input
+              value={catSearch}
+              onChange={(e) => setCatSearch(e.target.value)}
+              placeholder="Buscar categoria..."
+              className="w-full bg-[hsl(var(--surface-2))] border border-border rounded-lg pl-9 pr-3 py-2 text-sm"
+            />
+          </div>
+        )}
       </div>
 
+      {viewMode === "lista" ? (
       <div className="ep-card overflow-hidden">
         <table className="w-full text-sm">
           <thead className="border-b border-border">
@@ -82,7 +125,13 @@ export function EstoqueView() {
           </thead>
           <tbody>
             {filtered.length === 0 && (
-              <tr><td colSpan={5} className="px-4 py-10 text-center text-muted-foreground">Nenhum item cadastrado.</td></tr>
+              <tr><td colSpan={5} className="px-4 py-12 text-center">
+                <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                  <PackageOpen className="w-8 h-8 opacity-50" />
+                  <p className="text-sm">Nenhum item cadastrado.</p>
+                  <p className="text-xs text-faint">Clique em "Novo Item" para começar.</p>
+                </div>
+              </td></tr>
             )}
             {filtered.map((i) => {
               const cat = categorias.find((c) => c.id === i.categoria_id);
@@ -129,6 +178,90 @@ export function EstoqueView() {
           </tbody>
         </table>
       </div>
+      ) : (
+        // ============= POR CATEGORIA =============
+        <div className="space-y-4">
+          {categorias.length === 0 ? (
+            <div className="ep-card flex flex-col items-center justify-center py-16 text-center">
+              <div className="w-12 h-12 rounded-full bg-[hsl(var(--surface-2))] flex items-center justify-center mb-3">
+                <Tag className="w-6 h-6 text-muted-foreground" />
+              </div>
+              <h3 className="font-semibold text-base mb-1">Nenhuma categoria criada</h3>
+              <p className="text-sm text-muted-foreground mb-4 max-w-xs">
+                Crie categorias para organizar seus itens de estoque por tipo.
+              </p>
+              <button onClick={() => setOpenCats(true)} className="flex items-center gap-1.5 text-sm font-semibold bg-primary hover:bg-primary-hover text-primary-foreground rounded-lg px-4 py-2 transition-colors shadow-sm">
+                <Plus className="w-4 h-4" /> Criar primeira categoria
+              </button>
+            </div>
+          ) : (
+            <>
+              {categoriasFiltradas.map((c) => {
+                const itensDaCat = itens.filter((i) => i.categoria_id === c.id);
+                return (
+                  <div key={c.id} className="ep-card overflow-hidden">
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-[hsl(var(--surface-2))]">
+                      <div className="flex items-center gap-2">
+                        <Tag className="w-4 h-4 text-primary" />
+                        <h3 className="font-semibold text-sm">{c.nome}</h3>
+                      </div>
+                      <span className="text-xs text-muted-foreground font-mono">{itensDaCat.length} {itensDaCat.length === 1 ? "item" : "itens"}</span>
+                    </div>
+                    {itensDaCat.length === 0 ? (
+                      <p className="px-4 py-6 text-sm text-muted-foreground text-center">Nenhum item nesta categoria.</p>
+                    ) : (
+                      <div className="divide-y divide-border">
+                        {itensDaCat.map((i) => {
+                          const status = i.estoque_atual === 0 ? "zerado" : i.estoque_atual <= i.estoque_minimo ? "baixo" : "ok";
+                          return (
+                            <div key={i.id} className="px-4 py-3 flex items-center justify-between hover:bg-[hsl(var(--surface-2))] transition-colors">
+                              <span className="font-medium text-sm">{i.nome}</span>
+                              <div className="flex items-center gap-3">
+                                <span className="font-mono text-sm">{i.estoque_atual} <span className="text-faint font-normal">{i.unidade}</span></span>
+                                <span className={cn("ep-badge",
+                                  status === "ok" ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/30" :
+                                  status === "baixo" ? "bg-amber-500/10 text-amber-600 border-amber-500/30" :
+                                  "bg-red-500/10 text-red-600 border-red-500/30"
+                                )}>
+                                  {status === "ok" ? "OK" : status === "baixo" ? "Baixo" : "Zerado"}
+                                </span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+              {itensSemCategoria.length > 0 && !catSearch && (
+                <div className="ep-card overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-[hsl(var(--surface-2))]">
+                    <div className="flex items-center gap-2">
+                      <Tag className="w-4 h-4 text-muted-foreground" />
+                      <h3 className="font-semibold text-sm text-muted-foreground">Sem categoria</h3>
+                    </div>
+                    <span className="text-xs text-muted-foreground font-mono">{itensSemCategoria.length}</span>
+                  </div>
+                  <div className="divide-y divide-border">
+                    {itensSemCategoria.map((i) => (
+                      <div key={i.id} className="px-4 py-3 flex items-center justify-between hover:bg-[hsl(var(--surface-2))] transition-colors">
+                        <span className="font-medium text-sm">{i.nome}</span>
+                        <span className="font-mono text-sm">{i.estoque_atual} <span className="text-faint font-normal">{i.unidade}</span></span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {categoriasFiltradas.length === 0 && catSearch && (
+                <div className="ep-card py-10 text-center text-sm text-muted-foreground">
+                  Nenhuma categoria encontrada para "{catSearch}".
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
 
       <NovoItemModal open={openNovoItem} onClose={() => { setOpenNovoItem(false); setEditing(null); }} editing={editing}
         onSave={async (payload) => { if (editing) await updateItem(editing.id, payload); else await addItem(payload as Omit<ItemEstoque, "id">); }} />
