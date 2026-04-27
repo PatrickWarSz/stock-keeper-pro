@@ -7,6 +7,7 @@ import { HistoricoGeralModal } from "@/components/historico/HistoricoGeralModal"
 import { Plus, Settings, History, PlusCircle, MinusCircle, MoreHorizontal, Layers, CheckCircle2, AlertTriangle, XCircle, Pencil, Trash2, List, FolderTree, Search, PackageOpen, Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { fmtDateTime } from "@/lib/format";
+import { toast } from "sonner";
 
 export function EstoqueView() {
   const { itens, categorias, movimentacoes, addItem, updateItem, deleteItem, registrarEntrada, registrarSaida, addCategoria, updateCategoria, deleteCategoria } = useData();
