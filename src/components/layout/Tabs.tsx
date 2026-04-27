@@ -5,8 +5,8 @@ export type TabKey = "pedidos" | "estoque";
 
 export function MainTabs({ active, onChange }: { active: TabKey; onChange: (t: TabKey) => void }) {
   const tabs: { key: TabKey; label: string; icon: any }[] = [
-    { key: "pedidos", label: "Pedidos de Matéria Prima", icon: ShoppingCart },
     { key: "estoque", label: "Estoque", icon: Grid2x2 },
+    { key: "pedidos", label: "Pedidos de Matéria Prima", icon: ShoppingCart },
   ];
   return (
     <div className="bg-[hsl(var(--surface))] border-b border-border">
