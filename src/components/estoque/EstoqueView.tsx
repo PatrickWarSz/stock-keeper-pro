@@ -298,7 +298,11 @@ function NovoItemModal({ open, onClose, editing, onSave }: { open: boolean; onCl
   }, [editing, open]);
 
   const save = async () => {
-    if (!nome.trim()) { alert("Informe o nome."); return; }
+    if (!nome.trim()) {
+      const { toast } = await import("sonner");
+      toast.error("Informe o nome do item.");
+      return;
+    }
     await onSave({ nome: nome.trim(), categoria_id: categoriaId || null, unidade, estoque_atual: Number(estoque) || 0, estoque_minimo: Number(minimo) || 0 });
     onClose();
   };
@@ -307,7 +311,9 @@ function NovoItemModal({ open, onClose, editing, onSave }: { open: boolean; onCl
       icon={<Plus className="w-5 h-5 text-primary" />}
       footer={<><EpButton variant="ghost" onClick={onClose}>Cancelar</EpButton><EpButton onClick={save}>{editing ? "Salvar" : "Criar Item"}</EpButton></>}>
       <div className="space-y-4">
-        <EpField label="Nome" required><input className={epInput} value={nome} onChange={(e) => setNome(e.target.value)} /></EpField>
+        <EpField label="Nome do material" required>
+          <input className={epInput} value={nome} onChange={(e) => setNome(e.target.value)} placeholder="Ex: Tecido Suplex Preto" />
+        </EpField>
         <div className="grid grid-cols-2 gap-3">
           <EpField label="Categoria">
             <select className={epInput} value={categoriaId} onChange={(e) => setCategoriaId(e.target.value)}>
@@ -322,8 +328,12 @@ function NovoItemModal({ open, onClose, editing, onSave }: { open: boolean; onCl
           </EpField>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <EpField label="Estoque inicial"><input type="number" min="0" className={epInput} value={estoque} onChange={(e) => setEstoque(e.target.value === "" ? "" : Number(e.target.value))} /></EpField>
-          <EpField label="Estoque mínimo"><input type="number" min="0" className={epInput} value={minimo} onChange={(e) => setMinimo(e.target.value === "" ? "" : Number(e.target.value))} /></EpField>
+          <EpField label="Estoque inicial" hint="Quantidade atual em mãos">
+            <input type="number" min="0" className={epInput} value={estoque} onChange={(e) => setEstoque(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" />
+          </EpField>
+          <EpField label="Estoque mínimo" hint="Alerta de reposição">
+            <input type="number" min="0" className={epInput} value={minimo} onChange={(e) => setMinimo(e.target.value === "" ? "" : Number(e.target.value))} placeholder="0" />
+          </EpField>
         </div>
       </div>
     </EpModal>
