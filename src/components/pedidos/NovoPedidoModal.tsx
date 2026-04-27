@@ -5,6 +5,7 @@ import { useData } from "@/store/data-store";
 import { Pedido } from "@/types";
 import { brl, todayISO } from "@/lib/format";
 import { ShoppingCart } from "lucide-react";
+import { toast } from "sonner";
 
 interface Props {
   open: boolean;
@@ -46,7 +47,7 @@ export function NovoPedidoModal({ open, onClose, editing }: Props) {
 
   const handleSave = async () => {
     if (!produto.trim() || !fornecedorId || !quantidade || !precoUnitario) {
-      alert("Preencha produto, fornecedor, quantidade e preço.");
+      toast.error("Preencha produto, fornecedor, quantidade e preço.");
       return;
     }
     const payload = {

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useMemo, useState, ReactNode, useCallback } from "react";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
+import { toast } from "sonner";
 import {
   Categoria,
   Entrega,
@@ -187,14 +188,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
     if (!novo.nome) return;
     update((s) => ({ ...s, categorias: [...s.categorias, novo] }));
     await sb("categorias", () => supabase!.from("categorias").insert(novo));
+    toast.success("Categoria criada");
   };
   const updateCategoria = async (id: string, nome: string) => {
     update((s) => ({ ...s, categorias: s.categorias.map((c) => c.id === id ? { ...c, nome } : c) }));
     await sb("categorias", () => supabase!.from("categorias").update({ nome }).eq("id", id));
+    toast.success("Categoria atualizada");
   };
   const deleteCategoria = async (id: string) => {
     update((s) => ({ ...s, categorias: s.categorias.filter((c) => c.id !== id) }));
     await sb("categorias", () => supabase!.from("categorias").delete().eq("id", id));
+    toast.success("Categoria removida");
   };
 
   /* ---------- fornecedores ---------- */
@@ -202,14 +206,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
     const novo: Fornecedor = { ...f, id: uid() };
     update((s) => ({ ...s, fornecedores: [...s.fornecedores, novo] }));
     await sb("fornecedores", () => supabase!.from("fornecedores").insert(novo));
+    toast.success("Fornecedor adicionado");
   };
   const updateFornecedor = async (id: string, f: Partial<Fornecedor>) => {
     update((s) => ({ ...s, fornecedores: s.fornecedores.map((x) => x.id === id ? { ...x, ...f } : x) }));
     await sb("fornecedores", () => supabase!.from("fornecedores").update(f).eq("id", id));
+    toast.success("Fornecedor atualizado");
   };
   const deleteFornecedor = async (id: string) => {
     update((s) => ({ ...s, fornecedores: s.fornecedores.filter((x) => x.id !== id) }));
     await sb("fornecedores", () => supabase!.from("fornecedores").delete().eq("id", id));
+    toast.success("Fornecedor removido");
   };
 
   /* ---------- itens ---------- */
@@ -217,14 +224,17 @@ export function DataProvider({ children }: { children: ReactNode }) {
     const novo: ItemEstoque = { ...i, id: uid() };
     update((s) => ({ ...s, itens: [...s.itens, novo] }));
     await sb("itens_estoque", () => supabase!.from("itens_estoque").insert(novo));
+    toast.success("Item criado", { description: novo.nome });
   };
   const updateItem = async (id: string, i: Partial<ItemEstoque>) => {
     update((s) => ({ ...s, itens: s.itens.map((x) => x.id === id ? { ...x, ...i } : x) }));
     await sb("itens_estoque", () => supabase!.from("itens_estoque").update(i).eq("id", id));
+    toast.success("Item atualizado");
   };
   const deleteItem = async (id: string) => {
     update((s) => ({ ...s, itens: s.itens.filter((x) => x.id !== id) }));
     await sb("itens_estoque", () => supabase!.from("itens_estoque").delete().eq("id", id));
+    toast.success("Item removido");
   };
 
   /* ---------- movimentações genéricas ---------- */
@@ -275,6 +285,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       });
       return s;
     });
+    toast.success(`Entrada registrada: +${qtd}`);
   };
   const registrarSaida = async (itemId: string, qtd: number, observacao?: string) => {
     setState((s) => {
@@ -284,6 +295,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
       });
       return s;
     });
+    toast.success(`Saída registrada: -${qtd}`);
   };
 
   /* ---------- pedidos ---------- */
@@ -291,10 +303,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
     const novo: Pedido = { ...p, id: uid(), status: "pendente" };
     update((s) => ({ ...s, pedidos: [novo, ...s.pedidos] }));
     await sb("pedidos", () => supabase!.from("pedidos").insert(novo));
+    toast.success("Pedido criado", { description: novo.produto });
   };
   const updatePedido = async (id: string, p: Partial<Pedido>) => {
     update((s) => ({ ...s, pedidos: s.pedidos.map((x) => x.id === id ? { ...x, ...p } : x) }));
     await sb("pedidos", () => supabase!.from("pedidos").update(p).eq("id", id));
+    toast.success("Pedido atualizado");
   };
   const deletePedido = async (id: string) => {
     update((s) => ({
@@ -303,10 +317,12 @@ export function DataProvider({ children }: { children: ReactNode }) {
       entregas: s.entregas.filter((e) => e.pedido_id !== id),
     }));
     await sb("pedidos", () => supabase!.from("pedidos").delete().eq("id", id));
+    toast.success("Pedido removido");
   };
   const finalizarPedido = async (id: string) => {
     update((s) => ({ ...s, pedidos: s.pedidos.map((x) => x.id === id ? { ...x, status: "concluido" } : x) }));
     await sb("pedidos", () => supabase!.from("pedidos").update({ status: "concluido" }).eq("id", id));
+    toast.success("Pedido finalizado");
   };
 
   /* ---------- entregas ---------- */
@@ -368,11 +384,15 @@ export function DataProvider({ children }: { children: ReactNode }) {
     if (isSupabaseConfigured && supabase) {
       await supabase.from("entregas").insert(entrega);
     }
+    toast.success("Entrega registrada", {
+      description: input.lancou_estoque ? "Estoque atualizado" : undefined,
+    });
   };
 
   const limparHistorico = async () => {
     update((s) => ({ ...s, movimentacoes: [] }));
     await sb("movimentacoes", () => supabase!.from("movimentacoes").delete().neq("id", "00000000-0000-0000-0000-000000000000"));
+    toast.success("Histórico limpo");
   };
 
   const api: DataApi = useMemo(() => ({
