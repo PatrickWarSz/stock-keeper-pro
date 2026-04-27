@@ -1,16 +1,41 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { Header } from "@/components/layout/Header";
+import { MainTabs, TabKey } from "@/components/layout/Tabs";
+import { PedidosView } from "@/components/pedidos/PedidosView";
+import { EstoqueView } from "@/components/estoque/EstoqueView";
+import { FornecedoresModal } from "@/components/fornecedores/FornecedoresModal";
+import { useData } from "@/store/data-store";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+export default function Index() {
+  const [tab, setTab] = useState<TabKey>("pedidos");
+  const [openForn, setOpenForn] = useState(false);
+  const { loading, usingSupabase } = useData();
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen bg-background text-foreground">
+      <Header onOpenFornecedores={() => setOpenForn(true)} />
+      <MainTabs active={tab} onChange={setTab} />
+
+      {!usingSupabase && (
+        <div className="bg-amber-500/10 border-b border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs">
+          <div className="max-w-screen-xl mx-auto px-4 py-2">
+            ⚙️ Modo offline (localStorage). Configure <code className="font-mono">VITE_SUPABASE_URL</code> e{" "}
+            <code className="font-mono">VITE_SUPABASE_ANON_KEY</code> no <code className="font-mono">.env</code> para ativar o Supabase.
+          </div>
+        </div>
+      )}
+
+      <main className="max-w-screen-xl mx-auto px-4 py-6">
+        {loading ? (
+          <div className="text-center py-20 text-muted-foreground">Carregando...</div>
+        ) : tab === "pedidos" ? (
+          <PedidosView />
+        ) : (
+          <EstoqueView />
+        )}
+      </main>
+
+      <FornecedoresModal open={openForn} onClose={() => setOpenForn(false)} />
     </div>
   );
-};
-
-const Index = PlaceholderIndex;
-
-export default Index;
+}
