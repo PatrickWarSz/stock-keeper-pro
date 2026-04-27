@@ -8,7 +8,7 @@ import { RegistrarEntregaModal } from "./RegistrarEntregaModal";
 import { FinalizarPedidoModal } from "./FinalizarPedidoModal";
 import { HistoricoEntregasModal } from "./HistoricoEntregasModal";
 import { HistoricoGeralModal } from "@/components/historico/HistoricoGeralModal";
-import { Plus, History, Package, Clock, TriangleAlert, CheckCircle2, Search } from "lucide-react";
+import { Plus, History, Package, Clock, TriangleAlert, CheckCircle2, Search, PackageSearch } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type Filter = "todos" | "pendentes" | "atrasados" | "concluidos";
@@ -71,10 +71,10 @@ export function PedidosView() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-        <StatCard label="Total" icon={<Package className="w-4 h-4 text-faint" />} value={stats.total} />
-        <StatCard label="Pendentes" icon={<Clock className="w-4 h-4 text-amber-400" />} value={stats.pendentes} valueClass="text-amber-500" />
-        <StatCard label="Atrasados" icon={<TriangleAlert className="w-4 h-4 text-red-400" />} value={stats.atrasados} valueClass="text-red-500" />
-        <StatCard label="Concluídos" icon={<CheckCircle2 className="w-4 h-4 text-emerald-400" />} value={stats.concluidos} valueClass="text-emerald-500" />
+        <StatCard label="Total" icon={<Package className="w-5 h-5 text-faint" />} value={stats.total} />
+        <StatCard label="Pendentes" icon={<Clock className="w-5 h-5 text-amber-500" />} value={stats.pendentes} valueClass="text-amber-500" />
+        <StatCard label="Atrasados" icon={<TriangleAlert className="w-5 h-5 text-destructive" />} value={stats.atrasados} valueClass="text-destructive" />
+        <StatCard label="Concluídos" icon={<CheckCircle2 className="w-5 h-5 text-emerald-500" />} value={stats.concluidos} valueClass="text-emerald-500" />
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3 mb-4">
@@ -107,8 +107,9 @@ export function PedidosView() {
 
       <div className="space-y-3">
         {filtered.length === 0 && (
-          <div className="ep-card p-10 text-center text-muted-foreground">
-            Nenhum pedido encontrado.
+          <div className="ep-card flex flex-col items-center justify-center py-20 text-muted-foreground">
+            <PackageSearch className="w-10 h-10 mb-3 opacity-40" strokeWidth={1.5} />
+            <p className="text-sm">Nenhum pedido encontrado</p>
           </div>
         )}
         {filtered.map((p) => (
@@ -133,12 +134,10 @@ export function PedidosView() {
 
 function StatCard({ label, value, icon, valueClass }: { label: string; value: number; icon: React.ReactNode; valueClass?: string }) {
   return (
-    <div className="ep-card p-4 flex flex-col gap-2">
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{label}</span>
-        {icon}
-      </div>
-      <span className={cn("text-2xl font-bold", valueClass)}>{value}</span>
+    <div className="ep-card p-4 flex flex-col items-center justify-center gap-1.5 text-center">
+      {icon}
+      <span className="text-xs text-muted-foreground">{label}</span>
+      <span className={cn("text-2xl font-bold", valueClass ?? "text-foreground")}>{value}</span>
     </div>
   );
 }
