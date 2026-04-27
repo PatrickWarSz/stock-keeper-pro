@@ -1,11 +1,16 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import { ThemeProvider } from "@/components/theme-provider";
+import AppLayout from "./pages/AppLayout";
+import EstoquePage from "./pages/EstoquePage";
+import PedidosPage from "./pages/PedidosPage";
+import FornecedoresPage from "./pages/FornecedoresPage";
+import HistoricoPage from "./pages/HistoricoPage";
+import ConfiguracoesPage from "./pages/ConfiguracoesPage";
 
 const queryClient = new QueryClient();
 
@@ -17,7 +22,14 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route element={<AppLayout />}>
+              <Route path="/" element={<Navigate to="/estoque" replace />} />
+              <Route path="/estoque" element={<EstoquePage />} />
+              <Route path="/pedidos" element={<PedidosPage />} />
+              <Route path="/fornecedores" element={<FornecedoresPage />} />
+              <Route path="/historico" element={<HistoricoPage />} />
+              <Route path="/configuracoes" element={<ConfiguracoesPage />} />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
