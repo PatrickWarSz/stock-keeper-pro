@@ -298,11 +298,7 @@ function NovoItemModal({ open, onClose, editing, onSave }: { open: boolean; onCl
   }, [editing, open]);
 
   const save = async () => {
-    if (!nome.trim()) {
-      const { toast } = await import("sonner");
-      toast.error("Informe o nome do item.");
-      return;
-    }
+    if (!nome.trim()) { toast.error("Informe o nome do item."); return; }
     await onSave({ nome: nome.trim(), categoria_id: categoriaId || null, unidade, estoque_atual: Number(estoque) || 0, estoque_minimo: Number(minimo) || 0 });
     onClose();
   };
