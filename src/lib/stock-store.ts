@@ -48,13 +48,13 @@ export interface StockState {
   updateItem: (categoryId: string, itemId: string, updates: Partial<Omit<StockItem, 'id' | 'history'>>) => Promise<void>
   updateItemQuantity: (categoryId: string, itemId: string, newQuantity: number, type: 'entrada' | 'saida', movementQty: number, note?: string, orderId?: string) => Promise<void>
 
-  addCategory: (category: Omit<Category, 'items'>) => Promise<void>
+  addCategory: (category: Omit<Category, 'items'> & { items?: StockItem[] }) => Promise<void>
   updateCategory: (categoryId: string, name: string) => Promise<void>
   removeCategory: (categoryId: string) => Promise<void>
 
   clearHistory: () => Promise<void>
 
-  addSupplier: (supplier: Omit<Supplier, 'id'>) => Promise<void>
+  addSupplier: (supplier: Omit<Supplier, 'id'> & { id?: string }) => Promise<void>
   updateSupplier: (supplierId: string, updates: Partial<Omit<Supplier, 'id'>>) => Promise<void>
   removeSupplier: (supplierId: string) => Promise<void>
 

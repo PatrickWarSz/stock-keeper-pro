@@ -512,7 +512,6 @@ export function OrdersPage() {
           onOpenChange={(v) => !v && setEditDeliveryOpen(null)}
           order={editDeliveryOpen}
           categories={categories}
-          suppliers={suppliers}
           onSave={(params) => {
             updateDelivery({ orderId: editDeliveryOpen.id, ...params })
             toast.success("Entrega atualizada" + (params.createStockEntry ? " e lançamento no estoque ajustado!" : ""))
@@ -634,6 +633,7 @@ function CreateOrderDialog({
       deliveryStatus: e?.deliveryStatus || "Entrega Incompleta",
       notes: notes.trim() || undefined,
       stockEntryCreated: e?.stockEntryCreated || false,
+      deliveries: e?.deliveries || [],
     }
     onSave(order)
   }

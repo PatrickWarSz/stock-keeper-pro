@@ -71,13 +71,11 @@ export function AddItemDialog({
     const minQty = parseFloat(minQuantity) || 0
 
     addItem(categoryId, {
-      id: crypto.randomUUID(),
       name: name.trim(),
       quantity: qty,
       minQuantity: minQty,
       unit,
-      history: [],
-    })
+    } as any)
 
     toast.success(`Item "${name.trim()}" adicionado em ${selectedCategory?.name}`)
     reset()
