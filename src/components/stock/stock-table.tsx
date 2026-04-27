@@ -1,0 +1,187 @@
+
+import { useMemo, useState } from "react"
+import { ArrowUpCircle, ArrowDownCircle, MoreHorizontal, History, PenSquare, Trash2 } from "lucide-react"
+import { useStockStore } from "@/lib/stock-store"
+import { Button } from "@/components/ui/button"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { MovementDialog } from "./movement-dialog"
+import { EditItemDialog } from "./edit-item-dialog"
+import { StockItem } from "@/lib/types"
+import { toast } from "sonner"
+
+interface StockTableProps {
+  onViewHistory: (item: StockItem) => void;
+  onAddItem: () => void;
+}
+
+export function StockTable({ onViewHistory }: StockTableProps) {
+  const categories = useStockStore((state) => state.categories)
+  const selectedCategoryId = useStockStore((state) => state.selectedCategoryId)
+  const removeItem = useStockStore((state) => state.removeItem)
+  const [editingItem, setEditingItem] = useState<{
+    item: StockItem
+    categoryId: string
+    categoryName: string
+  } | null>(null)
+  const materials = useMemo(
+    () =>
+      categories
+        .filter((cat) => !selectedCategoryId || cat.id === selectedCategoryId)
+        .flatMap((cat) =>
+          cat.items.map((item) => ({ ...item, category: cat.name }))
+        ),
+    [categories, selectedCategoryId]
+  )
+  const [selectedMaterial, setSelectedMaterial] = useState<{
+    item: StockItem
+    categoryId: string
+  } | null>(null)
+  const [movementType, setMovementType] = useState<"entrada" | "saida">("entrada")
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+  const findItemAndCategory = (id: string) => {
+    for (const cat of categories) {
+      const item = cat.items.find((i) => i.id === id)
+      if (item) return { item, categoryId: cat.id, categoryName: cat.name }
+    }
+    return null
+  }
+
+  const handleMovement = (id: string, type: "entrada" | "saida") => {
+    const result = findItemAndCategory(id)
+    if (result) {
+      setSelectedMaterial(result)
+      setMovementType(type)
+      setIsDialogOpen(true)
+    }
+  }
+
+  const handleEditItem = (id: string) => {
+    const result = findItemAndCategory(id)
+    if (result) {
+      setEditingItem({
+        item: result.item,
+        categoryId: result.categoryId,
+        categoryName: result.categoryName,
+      })
+    }
+  }
+
+  const handleDeleteItem = (id: string) => {
+    const result = findItemAndCategory(id)
+    if (!result) return
+
+    removeItem(result.categoryId, id)
+    toast.success(`Item "${result.item.name}" excluído`) 
+  }
+
+  return (
+    <div className="rounded-md border bg-card text-card-foreground shadow-sm">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Material</TableHead>
+            <TableHead>Categoria</TableHead>
+            <TableHead className="text-right">Estoque</TableHead>
+            <TableHead className="text-right">Ações</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {materials.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={4} className="h-24 text-center text-muted-foreground">
+                Nenhum material cadastrado.
+              </TableCell>
+            </TableRow>
+          ) : (
+            materials.map((item: StockItem & { category: string }) => (
+              <TableRow key={item.id}>
+                <TableCell className="font-medium">{item.name}</TableCell>
+                <TableCell>{item.category}</TableCell>
+                <TableCell className="text-right font-mono">
+                  <span className={item.quantity <= item.minQuantity ? "text-destructive font-bold" : ""}>
+                    {item.quantity} {item.unit}
+                  </span>
+                </TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-emerald-600 border-emerald-200 hover:bg-emerald-50 h-8"
+                      onClick={() => handleMovement(item.id, "entrada")}
+                    >
+                      <ArrowUpCircle className="mr-1 h-4 w-4" />
+                      Entrada
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-rose-600 border-rose-200 hover:bg-rose-50 h-8"
+                      onClick={() => handleMovement(item.id, "saida")}
+                    >
+                      <ArrowDownCircle className="mr-1 h-4 w-4" />
+                      Saída
+                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => onViewHistory(item)}>
+                          <History className="mr-2 h-4 w-4" /> Histórico
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleEditItem(item.id)}>
+                          <PenSquare className="mr-2 h-4 w-4" /> Editar
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive" onClick={() => handleDeleteItem(item.id)}>
+                          <Trash2 className="mr-2 h-4 w-4" /> Excluir
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
+
+      {selectedMaterial && (
+        <MovementDialog
+          item={selectedMaterial.item}
+          categoryId={selectedMaterial.categoryId}
+          type={movementType}
+          open={isDialogOpen}
+          onOpenChange={setIsDialogOpen}
+        />
+      )}
+      {editingItem && (
+        <EditItemDialog
+          open={!!editingItem}
+          onOpenChange={(open) => {
+            if (!open) setEditingItem(null)
+          }}
+          item={editingItem.item}
+          categoryId={editingItem.categoryId}
+          categoryName={editingItem.categoryName}
+        />
+      )}
+    </div>
+  )
+}
