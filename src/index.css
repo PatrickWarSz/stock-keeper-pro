@@ -2,115 +2,99 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 @layer base {
   :root {
-    /* Estoque Pro — Light theme (DM Sans, brand blue) */
-    --background: 220 33% 97%;        /* #f4f6fa */
-    --foreground: 222 47% 11%;        /* #0f172a */
-
-    --surface: 0 0% 100%;             /* card surface */
-    --surface-2: 210 40% 98%;         /* inputs / subtle */
+    --background: 220 33% 97%;
+    --foreground: 230 30% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 230 30% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 230 30% 10%;
 
-    --primary: 217 91% 55%;           /* brand-600 #2563eb */
+    --primary: 230 70% 55%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 224 76% 48%;     /* brand-700 */
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 220 25% 95%;
+    --secondary-foreground: 230 25% 20%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;  /* #64748b */
-    --faint: 215 20% 65%;             /* #94a3b8 */
+    --muted: 220 20% 94%;
+    --muted-foreground: 230 10% 45%;
 
-    --accent: 217 91% 96%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 145 50% 70%;
+    --accent-foreground: 145 40% 20%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 15 80% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 152 69% 38%;
-    --warning: 38 92% 50%;
-    --info: 217 91% 55%;
+    --warning: 40 80% 55%;
+    --warning-foreground: 40 60% 25%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 217 91% 55%;
+    --success: 145 60% 42%;
+    --success-foreground: 0 0% 100%;
+
+    --border: 220 20% 89%;
+    --input: 220 20% 91%;
+    --ring: 230 70% 55%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 230 30% 10%;
+    --sidebar-primary: 230 70% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 25% 95%;
+    --sidebar-accent-foreground: 230 25% 20%;
+    --sidebar-border: 220 20% 89%;
+    --sidebar-ring: 230 70% 55%;
   }
 
   .dark {
-    --background: 215 28% 7%;          /* #0d1117 */
-    --foreground: 210 40% 95%;
+    --background: 230 25% 10%;
+    --foreground: 220 20% 95%;
 
-    --surface: 215 19% 12%;            /* #161b22 */
-    --surface-2: 215 22% 15%;          /* #1c2330 */
+    --card: 230 22% 14%;
+    --card-foreground: 220 20% 95%;
 
-    --card: 215 19% 12%;
-    --card-foreground: 210 40% 95%;
+    --popover: 230 22% 14%;
+    --popover-foreground: 220 20% 95%;
 
-    --popover: 215 19% 12%;
-    --popover-foreground: 210 40% 95%;
-
-    --primary: 217 91% 60%;
+    --primary: 230 75% 65%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 217 91% 55%;
 
-    --secondary: 215 22% 18%;
-    --secondary-foreground: 210 40% 95%;
+    --secondary: 230 18% 20%;
+    --secondary-foreground: 220 20% 92%;
 
-    --muted: 215 22% 18%;
-    --muted-foreground: 215 20% 65%;
-    --faint: 215 16% 50%;
+    --muted: 230 18% 20%;
+    --muted-foreground: 220 12% 60%;
 
-    --accent: 217 50% 22%;
-    --accent-foreground: 210 40% 95%;
+    --accent: 145 50% 65%;
+    --accent-foreground: 145 30% 15%;
 
-    --destructive: 0 70% 50%;
+    --destructive: 15 75% 55%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 152 60% 45%;
-    --warning: 38 92% 55%;
-    --info: 217 91% 60%;
+    --warning: 40 80% 60%;
+    --warning-foreground: 40 50% 15%;
 
-    --border: 215 19% 22%;
-    --input: 215 19% 22%;
-    --ring: 217 91% 60%;
+    --success: 145 60% 50%;
+    --success-foreground: 0 0% 100%;
 
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --border: 230 18% 24%;
+    --input: 230 18% 22%;
+    --ring: 230 75% 65%;
+
+    --sidebar-background: 230 25% 12%;
+    --sidebar-foreground: 220 20% 95%;
+    --sidebar-primary: 230 75% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 230 18% 20%;
+    --sidebar-accent-foreground: 220 20% 92%;
+    --sidebar-border: 230 18% 24%;
+    --sidebar-ring: 230 75% 65%;
   }
 }
 
@@ -118,33 +102,8 @@ All colors MUST be HSL.
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 }
-
-@layer components {
-  .ep-card {
-    @apply bg-[hsl(var(--surface))] border border-border rounded-xl;
-  }
-  .ep-input {
-    @apply w-full bg-[hsl(var(--surface-2))] border border-border text-foreground rounded-lg px-3 py-2 text-sm
-           outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20;
-  }
-  .ep-badge {
-    @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-medium border;
-  }
-  .ep-pill {
-    @apply px-3.5 py-1 rounded-full text-[13px] font-medium cursor-pointer transition-all border;
-  }
-  .ep-pill-active {
-    @apply bg-primary text-primary-foreground border-primary;
-  }
-  .ep-pill-inactive {
-    @apply bg-[hsl(var(--surface-2))] text-muted-foreground border-border hover:border-primary/40;
-  }
-}
-
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
