@@ -571,9 +571,9 @@ export default function LandingPage() {
                 </p>
 
                 <Button asChild size="lg" className="mt-6 h-12 w-full text-base shadow-md">
-                  <Link to="/app/estoque">
+                  <a href={hubSignupUrl()}>
                     Quero testar agora <ArrowRight className="ml-1 h-5 w-5" />
-                  </Link>
+                  </a>
                 </Button>
                 <p className="mt-3 text-center text-xs text-muted-foreground">
                   Garantia incondicional de 30 dias.
