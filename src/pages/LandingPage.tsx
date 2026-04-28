@@ -676,6 +676,105 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ---------- ECOSSISTEMA HUB ---------- */}
+      <section className="relative overflow-hidden border-y border-border bg-background py-20">
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,hsl(var(--primary-soft))_0%,transparent_70%)]"
+        />
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="grid items-center gap-10 md:grid-cols-[1.1fr_1fr]">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-soft px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
+                <Layers className="h-3 w-3" />
+                Faz parte de algo maior
+              </div>
+              <h2 className="mt-4 text-3xl font-extrabold tracking-tight md:text-4xl">
+                Estoque Pro é só uma peça do{" "}
+                <span className="bg-gradient-to-r from-primary to-warning bg-clip-text text-transparent">
+                  {HUB_NAME}
+                </span>.
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                Um único login, um único painel, vários programas trabalhando
+                pra sua operação: estoque, devoluções, fornecedores, pedidos
+                e tudo que vem por aí. Você assina o que precisa, quando
+                precisa — e tudo conversa entre si.
+              </p>
+
+              <ul className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
+                {[
+                  "1 conta, vários programas",
+                  "1 fatura, sem confusão",
+                  "Equipe centralizada",
+                  "Novos apps todo mês",
+                ].map((i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+                    <span className="text-foreground/90">{i}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Button asChild size="lg" variant="outline" className="h-12 px-6 text-base">
+                  <a href={hubLandingUrl()}>
+                    Conhecer o {HUB_NAME} <ExternalLink className="ml-1 h-4 w-4" />
+                  </a>
+                </Button>
+                <Button asChild size="lg" variant="ghost" className="h-12 px-6 text-base">
+                  <a href={hubLoginUrl()}>
+                    Já tenho conta — entrar <ArrowRight className="ml-1 h-4 w-4" />
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-lg">
+              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Dentro do hub você encontra
+              </p>
+              <ul className="mt-4 space-y-3">
+                {[
+                  { icon: Boxes, name: "Estoque Pro", desc: "Matéria-prima e insumos têxteis", here: true },
+                  { icon: Package, name: "Devoluções Pro", desc: "Trocas, devoluções e logística reversa" },
+                  { icon: Truck, name: "Pedidos Pro", desc: "Pedidos de compra e contratos" },
+                  { icon: LineChart, name: "+ novos apps", desc: "Lançamentos todo mês no hub" },
+                ].map((p) => (
+                  <li
+                    key={p.name}
+                    className={`flex items-center gap-3 rounded-xl border p-3 transition ${
+                      p.here
+                        ? "border-primary/40 bg-primary-soft"
+                        : "border-border bg-background"
+                    }`}
+                  >
+                    <div
+                      className={`flex h-9 w-9 items-center justify-center rounded-lg ${
+                        p.here
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      <p.icon className="h-4 w-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold">{p.name}</p>
+                      <p className="text-xs text-muted-foreground">{p.desc}</p>
+                    </div>
+                    {p.here && (
+                      <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary-foreground">
+                        Você está aqui
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ---------- CTA FINAL ---------- */}
       <section className="relative overflow-hidden bg-foreground py-24 text-background">
         <div
