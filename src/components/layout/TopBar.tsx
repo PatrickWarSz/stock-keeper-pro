@@ -6,6 +6,7 @@ import { useTheme } from "@/components/theme-provider";
 import { useStockStore } from "@/lib/stock-store";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { HubBadge } from "@/components/HubBadge";
 
 export function TopBar() {
   const { theme, setTheme } = useTheme();
@@ -46,6 +47,7 @@ export function TopBar() {
       </form>
 
       <div className="ml-auto flex items-center gap-2">
+        <HubBadge variant="topbar" />
         {lowOrZero > 0 && (
           <button
             onClick={() => navigate("/estoque")}

@@ -20,6 +20,7 @@ import {
   Crown,
   Smartphone,
   History as HistoryIcon,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +32,13 @@ import {
 } from "@/components/ui/accordion";
 import heroImg from "@/assets/hero-textile.jpg";
 import painImg from "@/assets/pain-chaos.jpg";
+import { HubBadge } from "@/components/HubBadge";
+import {
+  HUB_NAME,
+  hubLandingUrl,
+  hubLoginUrl,
+  hubSignupUrl,
+} from "@/lib/hub";
 
 /* ---------- Pequenos helpers visuais ---------- */
 
@@ -78,6 +86,31 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      {/* ---------- BARRA HUB (anúncio do ecossistema) ---------- */}
+      <div className="border-b border-border/60 bg-foreground text-background">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2 text-xs">
+          <div className="flex items-center gap-2">
+            <Layers className="h-3.5 w-3.5 text-primary" />
+            <span className="text-background/80">
+              Estoque Pro faz parte do{" "}
+              <a
+                href={hubLandingUrl()}
+                className="font-bold text-background underline-offset-4 hover:underline"
+              >
+                {HUB_NAME}
+              </a>{" "}
+              — hub de operações para o seu negócio.
+            </span>
+          </div>
+          <a
+            href={hubLandingUrl()}
+            className="hidden items-center gap-1 font-semibold text-background/80 hover:text-background sm:inline-flex"
+          >
+            Conhecer o hub <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+      </div>
+
       {/* ---------- NAV ---------- */}
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
@@ -102,11 +135,14 @@ export default function LandingPage() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Link to="/app/estoque" className="hidden text-sm font-medium text-muted-foreground hover:text-foreground sm:block">
+            <a
+              href={hubLoginUrl()}
+              className="hidden text-sm font-medium text-muted-foreground hover:text-foreground sm:block"
+            >
               Entrar
-            </Link>
+            </a>
             <Button asChild size="sm" className="shadow-sm">
-              <a href="#preco">
+              <a href={hubSignupUrl()}>
                 Começar grátis <ArrowRight className="ml-1 h-4 w-4" />
               </a>
             </Button>
@@ -140,7 +176,7 @@ export default function LandingPage() {
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg" className="h-12 px-6 text-base shadow-md">
-                <a href="#preco">
+                <a href={hubSignupUrl()}>
                   Testar 7 dias grátis <ArrowRight className="ml-1 h-5 w-5" />
                 </a>
               </Button>
@@ -535,9 +571,9 @@ export default function LandingPage() {
                 </p>
 
                 <Button asChild size="lg" className="mt-6 h-12 w-full text-base shadow-md">
-                  <Link to="/app/estoque">
+                  <a href={hubSignupUrl()}>
                     Quero testar agora <ArrowRight className="ml-1 h-5 w-5" />
-                  </Link>
+                  </a>
                 </Button>
                 <p className="mt-3 text-center text-xs text-muted-foreground">
                   Garantia incondicional de 30 dias.
@@ -640,6 +676,105 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ---------- ECOSSISTEMA HUB ---------- */}
+      <section className="relative overflow-hidden border-y border-border bg-background py-20">
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,hsl(var(--primary-soft))_0%,transparent_70%)]"
+        />
+        <div className="mx-auto max-w-5xl px-4">
+          <div className="grid items-center gap-10 md:grid-cols-[1.1fr_1fr]">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-soft px-3 py-1 text-xs font-semibold uppercase tracking-wider text-primary">
+                <Layers className="h-3 w-3" />
+                Faz parte de algo maior
+              </div>
+              <h2 className="mt-4 text-3xl font-extrabold tracking-tight md:text-4xl">
+                Estoque Pro é só uma peça do{" "}
+                <span className="bg-gradient-to-r from-primary to-warning bg-clip-text text-transparent">
+                  {HUB_NAME}
+                </span>.
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground">
+                Um único login, um único painel, vários programas trabalhando
+                pra sua operação: estoque, devoluções, fornecedores, pedidos
+                e tudo que vem por aí. Você assina o que precisa, quando
+                precisa — e tudo conversa entre si.
+              </p>
+
+              <ul className="mt-6 grid gap-3 text-sm sm:grid-cols-2">
+                {[
+                  "1 conta, vários programas",
+                  "1 fatura, sem confusão",
+                  "Equipe centralizada",
+                  "Novos apps todo mês",
+                ].map((i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+                    <span className="text-foreground/90">{i}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Button asChild size="lg" variant="outline" className="h-12 px-6 text-base">
+                  <a href={hubLandingUrl()}>
+                    Conhecer o {HUB_NAME} <ExternalLink className="ml-1 h-4 w-4" />
+                  </a>
+                </Button>
+                <Button asChild size="lg" variant="ghost" className="h-12 px-6 text-base">
+                  <a href={hubLoginUrl()}>
+                    Já tenho conta — entrar <ArrowRight className="ml-1 h-4 w-4" />
+                  </a>
+                </Button>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-lg">
+              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                Dentro do hub você encontra
+              </p>
+              <ul className="mt-4 space-y-3">
+                {[
+                  { icon: Boxes, name: "Estoque Pro", desc: "Matéria-prima e insumos têxteis", here: true },
+                  { icon: Package, name: "Devoluções Pro", desc: "Trocas, devoluções e logística reversa" },
+                  { icon: Truck, name: "Pedidos Pro", desc: "Pedidos de compra e contratos" },
+                  { icon: LineChart, name: "+ novos apps", desc: "Lançamentos todo mês no hub" },
+                ].map((p) => (
+                  <li
+                    key={p.name}
+                    className={`flex items-center gap-3 rounded-xl border p-3 transition ${
+                      p.here
+                        ? "border-primary/40 bg-primary-soft"
+                        : "border-border bg-background"
+                    }`}
+                  >
+                    <div
+                      className={`flex h-9 w-9 items-center justify-center rounded-lg ${
+                        p.here
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      <p.icon className="h-4 w-4" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold">{p.name}</p>
+                      <p className="text-xs text-muted-foreground">{p.desc}</p>
+                    </div>
+                    {p.here && (
+                      <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-primary-foreground">
+                        Você está aqui
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ---------- CTA FINAL ---------- */}
       <section className="relative overflow-hidden bg-foreground py-24 text-background">
         <div
@@ -659,9 +794,9 @@ export default function LandingPage() {
             7 dias grátis. Sem cartão. Sem risco. Sem desculpa.
           </p>
           <Button asChild size="lg" className="mt-8 h-14 px-8 text-base shadow-2xl">
-            <Link to="/app/estoque">
+            <a href={hubSignupUrl()}>
               Começar agora — é grátis <ArrowRight className="ml-1 h-5 w-5" />
-            </Link>
+            </a>
           </Button>
           <p className="mt-4 text-xs text-background/50">
             Mais de 2.300 fábricas já fizeram. Você é a próxima.
@@ -678,11 +813,16 @@ export default function LandingPage() {
             </div>
             <span className="font-semibold text-foreground">Estoque Pro</span>
             <span>· © {new Date().getFullYear()}</span>
+            <span className="text-muted-foreground/50">·</span>
+            <HubBadge variant="footer" />
           </div>
           <div className="flex items-center gap-6">
             <a href="#" className="hover:text-foreground">Termos</a>
             <a href="#" className="hover:text-foreground">Privacidade</a>
             <a href="#" className="hover:text-foreground">Contato</a>
+            <a href={hubLoginUrl()} className="font-semibold text-foreground hover:text-primary">
+              Entrar no {HUB_NAME}
+            </a>
           </div>
         </div>
       </footer>
