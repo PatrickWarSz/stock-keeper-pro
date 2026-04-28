@@ -11,6 +11,7 @@ import PedidosPage from "./pages/PedidosPage";
 import FornecedoresPage from "./pages/FornecedoresPage";
 import HistoricoPage from "./pages/HistoricoPage";
 import ConfiguracoesPage from "./pages/ConfiguracoesPage";
+import LandingPage from "./pages/LandingPage";
 
 const queryClient = new QueryClient();
 
@@ -22,13 +23,20 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+            <Route path="/" element={<LandingPage />} />
             <Route element={<AppLayout />}>
-              <Route path="/" element={<Navigate to="/estoque" replace />} />
-              <Route path="/estoque" element={<EstoquePage />} />
-              <Route path="/pedidos" element={<PedidosPage />} />
-              <Route path="/fornecedores" element={<FornecedoresPage />} />
-              <Route path="/historico" element={<HistoricoPage />} />
-              <Route path="/configuracoes" element={<ConfiguracoesPage />} />
+              <Route path="/app" element={<Navigate to="/app/estoque" replace />} />
+              <Route path="/app/estoque" element={<EstoquePage />} />
+              <Route path="/app/pedidos" element={<PedidosPage />} />
+              <Route path="/app/fornecedores" element={<FornecedoresPage />} />
+              <Route path="/app/historico" element={<HistoricoPage />} />
+              <Route path="/app/configuracoes" element={<ConfiguracoesPage />} />
+              {/* compat com URLs antigas */}
+              <Route path="/estoque" element={<Navigate to="/app/estoque" replace />} />
+              <Route path="/pedidos" element={<Navigate to="/app/pedidos" replace />} />
+              <Route path="/fornecedores" element={<Navigate to="/app/fornecedores" replace />} />
+              <Route path="/historico" element={<Navigate to="/app/historico" replace />} />
+              <Route path="/configuracoes" element={<Navigate to="/app/configuracoes" replace />} />
             </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
