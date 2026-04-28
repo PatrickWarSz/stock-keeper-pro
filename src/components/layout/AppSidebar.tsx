@@ -15,14 +15,14 @@ import {
 import { useStockStore } from "@/lib/stock-store";
 
 const operacao = [
-  { title: "Estoque", url: "/estoque", icon: Package },
-  { title: "Pedidos", url: "/pedidos", icon: ShoppingCart },
-  { title: "Fornecedores", url: "/fornecedores", icon: Truck },
-  { title: "Histórico", url: "/historico", icon: History },
+  { title: "Estoque", url: "/app/estoque", icon: Package },
+  { title: "Pedidos", url: "/app/pedidos", icon: ShoppingCart },
+  { title: "Fornecedores", url: "/app/fornecedores", icon: Truck },
+  { title: "Histórico", url: "/app/historico", icon: History },
 ];
 
 const sistema = [
-  { title: "Configurações", url: "/configuracoes", icon: Settings },
+  { title: "Configurações", url: "/app/configuracoes", icon: Settings },
 ];
 
 export function AppSidebar() {
@@ -41,7 +41,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border">
       <SidebarHeader className="border-b border-sidebar-border">
-        <NavLink to="/estoque" className="flex items-center gap-3 px-2 py-2">
+        <NavLink to="/app/estoque" className="flex items-center gap-3 px-2 py-2">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
             <Boxes className="h-5 w-5" />
           </div>
@@ -71,7 +71,7 @@ export function AppSidebar() {
                     <NavLink to={item.url} className={linkBase} activeClassName={linkActive}>
                       <item.icon className="h-4 w-4 shrink-0" />
                       {!collapsed && <span className="flex-1">{item.title}</span>}
-                      {!collapsed && item.url === "/pedidos" && pendingCount > 0 && (
+                      {!collapsed && item.url === "/app/pedidos" && pendingCount > 0 && (
                         <span className="ml-auto rounded-full bg-warning/20 px-2 py-0.5 text-[10px] font-semibold text-warning">
                           {pendingCount}
                         </span>
