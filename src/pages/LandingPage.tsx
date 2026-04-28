@@ -176,7 +176,7 @@ export default function LandingPage() {
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg" className="h-12 px-6 text-base shadow-md">
-                <a href="#preco">
+                <a href={hubSignupUrl()}>
                   Testar 7 dias grátis <ArrowRight className="ml-1 h-5 w-5" />
                 </a>
               </Button>
