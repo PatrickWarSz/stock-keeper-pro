@@ -813,11 +813,16 @@ export default function LandingPage() {
             </div>
             <span className="font-semibold text-foreground">Estoque Pro</span>
             <span>· © {new Date().getFullYear()}</span>
+            <span className="text-muted-foreground/50">·</span>
+            <HubBadge variant="footer" />
           </div>
           <div className="flex items-center gap-6">
             <a href="#" className="hover:text-foreground">Termos</a>
             <a href="#" className="hover:text-foreground">Privacidade</a>
             <a href="#" className="hover:text-foreground">Contato</a>
+            <a href={hubLoginUrl()} className="font-semibold text-foreground hover:text-primary">
+              Entrar no {HUB_NAME}
+            </a>
           </div>
         </div>
       </footer>
