@@ -20,6 +20,7 @@ import {
   Crown,
   Smartphone,
   History as HistoryIcon,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +32,13 @@ import {
 } from "@/components/ui/accordion";
 import heroImg from "@/assets/hero-textile.jpg";
 import painImg from "@/assets/pain-chaos.jpg";
+import { HubBadge } from "@/components/HubBadge";
+import {
+  HUB_NAME,
+  hubLandingUrl,
+  hubLoginUrl,
+  hubSignupUrl,
+} from "@/lib/hub";
 
 /* ---------- Pequenos helpers visuais ---------- */
 
