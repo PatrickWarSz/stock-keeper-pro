@@ -86,6 +86,31 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      {/* ---------- BARRA HUB (anúncio do ecossistema) ---------- */}
+      <div className="border-b border-border/60 bg-foreground text-background">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2 text-xs">
+          <div className="flex items-center gap-2">
+            <Layers className="h-3.5 w-3.5 text-primary" />
+            <span className="text-background/80">
+              Estoque Pro faz parte do{" "}
+              <a
+                href={hubLandingUrl()}
+                className="font-bold text-background underline-offset-4 hover:underline"
+              >
+                {HUB_NAME}
+              </a>{" "}
+              — hub de operações para o seu negócio.
+            </span>
+          </div>
+          <a
+            href={hubLandingUrl()}
+            className="hidden items-center gap-1 font-semibold text-background/80 hover:text-background sm:inline-flex"
+          >
+            Conhecer o hub <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
+      </div>
+
       {/* ---------- NAV ---------- */}
       <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
@@ -110,11 +135,14 @@ export default function LandingPage() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <Link to="/app/estoque" className="hidden text-sm font-medium text-muted-foreground hover:text-foreground sm:block">
+            <a
+              href={hubLoginUrl()}
+              className="hidden text-sm font-medium text-muted-foreground hover:text-foreground sm:block"
+            >
               Entrar
-            </Link>
+            </a>
             <Button asChild size="sm" className="shadow-sm">
-              <a href="#preco">
+              <a href={hubSignupUrl()}>
                 Começar grátis <ArrowRight className="ml-1 h-4 w-4" />
               </a>
             </Button>
