@@ -695,9 +695,9 @@ export default function LandingPage() {
             7 dias grátis. Sem cartão. Sem risco. Sem desculpa.
           </p>
           <Button asChild size="lg" className="mt-8 h-14 px-8 text-base shadow-2xl">
-            <Link to="/app/estoque">
+            <a href={hubSignupUrl()}>
               Começar agora — é grátis <ArrowRight className="ml-1 h-5 w-5" />
-            </Link>
+            </a>
           </Button>
           <p className="mt-4 text-xs text-background/50">
             Mais de 2.300 fábricas já fizeram. Você é a próxima.
