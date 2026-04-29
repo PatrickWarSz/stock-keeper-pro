@@ -163,17 +163,27 @@ export default function LandingPage() {
           </nav>
 
           <div className="flex items-center gap-2">
-            <a
-              href={hubLoginUrl()}
-              className="hidden text-sm font-medium text-muted-foreground hover:text-foreground sm:block"
-            >
-              Entrar
-            </a>
-            <Button asChild size="sm" className="shadow-sm">
-              <a href={hubSignupUrl()}>
-                Começar grátis <ArrowRight className="ml-1 h-4 w-4" />
-              </a>
-            </Button>
+            {hasActiveAccess ? (
+              <Button asChild size="sm" className="shadow-sm">
+                <Link to="/app/estoque">
+                  Abrir Estoque Pro <ArrowRight className="ml-1 h-4 w-4" />
+                </Link>
+              </Button>
+            ) : (
+              <>
+                <a
+                  href={hubLoginUrl()}
+                  className="hidden text-sm font-medium text-muted-foreground hover:text-foreground sm:block"
+                >
+                  Entrar
+                </a>
+                <Button asChild size="sm" className="shadow-sm">
+                  <a href={hubSignupUrl()}>
+                    Começar grátis <ArrowRight className="ml-1 h-4 w-4" />
+                  </a>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -203,14 +213,24 @@ export default function LandingPage() {
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Button asChild size="lg" className="h-12 px-6 text-base shadow-md">
-                <a href={hubSignupUrl()}>
-                  Testar 7 dias grátis <ArrowRight className="ml-1 h-5 w-5" />
-                </a>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="h-12 px-6 text-base">
-                <Link to="/app/estoque">Ver demonstração ao vivo</Link>
-              </Button>
+              {hasActiveAccess ? (
+                <Button asChild size="lg" className="h-12 px-6 text-base shadow-md">
+                  <Link to="/app/estoque">
+                    Abrir Estoque Pro <ArrowRight className="ml-1 h-5 w-5" />
+                  </Link>
+                </Button>
+              ) : (
+                <>
+                  <Button asChild size="lg" className="h-12 px-6 text-base shadow-md">
+                    <a href={hubSignupUrl()}>
+                      Testar 7 dias grátis <ArrowRight className="ml-1 h-5 w-5" />
+                    </a>
+                  </Button>
+                  <Button asChild size="lg" variant="outline" className="h-12 px-6 text-base">
+                    <Link to="/app/estoque">Ver demonstração ao vivo</Link>
+                  </Button>
+                </>
+              )}
             </div>
 
             <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
