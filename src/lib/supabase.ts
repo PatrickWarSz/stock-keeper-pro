@@ -19,12 +19,20 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
  */
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as
+// Aceita os dois nomes: VITE_SUPABASE_ANON_KEY (padrão do Hub) ou
+// VITE_SUPABASE_PUBLISHABLE_KEY (nome alternativo). Qualquer um funciona.
+const SUPABASE_ANON_KEY = (import.meta.env.VITE_SUPABASE_ANON_KEY ??
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY) as string | undefined;
+
+// project_id é opcional — se não vier no .env, derivamos da URL
+// (https://<ref>.supabase.co → <ref>).
+const PROJECT_ID_FROM_ENV = import.meta.env.VITE_SUPABASE_PROJECT_ID as
   | string
   | undefined;
-const SUPABASE_PROJECT_ID = import.meta.env.VITE_SUPABASE_PROJECT_ID as
-  | string
-  | undefined;
+const PROJECT_ID_FROM_URL = SUPABASE_URL?.match(
+  /^https?:\/\/([^.]+)\.supabase\.co/i,
+)?.[1];
+const SUPABASE_PROJECT_ID = PROJECT_ID_FROM_ENV ?? PROJECT_ID_FROM_URL;
 
 export const isSupabaseConfigured = Boolean(
   SUPABASE_URL && SUPABASE_ANON_KEY,
@@ -35,7 +43,7 @@ if (!isSupabaseConfigured) {
   // O guardião de rota (useHubSession) é quem vai redirecionar pro Hub.
   // eslint-disable-next-line no-console
   console.warn(
-    "[supabase] VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY não configurados. " +
+    "[supabase] VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY não configurados. " +
       "Defina-os no .env com os MESMOS valores do Hub Nexus Grid.",
   );
 }
