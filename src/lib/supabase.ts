@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { captureUnitFromHandoff } from "@/lib/hub";
 
 /**
  * Cliente Supabase ÚNICO do Estoque Pro.
@@ -37,6 +38,10 @@ const SUPABASE_PROJECT_ID = PROJECT_ID_FROM_ENV ?? PROJECT_ID_FROM_URL;
 export const isSupabaseConfigured = Boolean(
   SUPABASE_URL && SUPABASE_ANON_KEY,
 );
+
+// Captura `unit_id` do fragment ANTES de instanciar o cliente Supabase
+// (que vai consumir o resto do hash via detectSessionInUrl).
+captureUnitFromHandoff();
 
 if (!isSupabaseConfigured) {
   // Não derruba o app — só avisa. A landing pública continua funcionando.

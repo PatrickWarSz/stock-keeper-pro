@@ -32,7 +32,7 @@ export const hubLandingUrl = () => HUB_BASE_URL;
 /** URL de login no hub, com contexto deste app + redirect de retorno. */
 export const hubLoginUrl = () => {
   const params = new URLSearchParams({
-    app: APP_SLUG,
+    intent: APP_SLUG,
     redirect: RETURN_URL,
   });
   return `${HUB_BASE_URL}/login?${params.toString()}`;
@@ -41,7 +41,7 @@ export const hubLoginUrl = () => {
 /** URL de cadastro / início do trial deste app no hub. */
 export const hubSignupUrl = (plan: string = "estoque-pro") => {
   const params = new URLSearchParams({
-    app: APP_SLUG,
+    intent: APP_SLUG,
     plan,
     redirect: RETURN_URL,
   });
@@ -50,3 +50,42 @@ export const hubSignupUrl = (plan: string = "estoque-pro") => {
 
 /** Página do app dentro do hub (catálogo / detalhe / compra). */
 export const hubAppUrl = () => `${HUB_BASE_URL}/apps/${APP_SLUG}`;
+
+/** Chave do localStorage onde guardamos a unit_id ativa vinda do Hub. */
+export const ACTIVE_UNIT_STORAGE_KEY = "hub:active_unit";
+
+/**
+ * Lê e consome o `unit_id` do fragment da URL (handoff do Hub) salvando
+ * em localStorage. Deve rodar ANTES do supabase-js processar o hash —
+ * removemos só nosso parâmetro e devolvemos o resto pro fragment para
+ * `detectSessionInUrl` continuar funcionando.
+ */
+export function captureUnitFromHandoff(): string | null {
+  if (typeof window === "undefined") return null;
+  const hash = window.location.hash;
+  if (!hash || hash.length < 2) {
+    return localStorage.getItem(ACTIVE_UNIT_STORAGE_KEY);
+  }
+  const params = new URLSearchParams(hash.slice(1));
+  const unitId = params.get("unit_id");
+  if (unitId) {
+    try {
+      localStorage.setItem(ACTIVE_UNIT_STORAGE_KEY, unitId);
+    } catch {
+      /* ignore */
+    }
+    params.delete("unit_id");
+    const rest = params.toString();
+    const newHash = rest ? `#${rest}` : "";
+    // Substitui sem rolar histórico nem disparar reload.
+    const { pathname, search } = window.location;
+    window.history.replaceState(null, "", `${pathname}${search}${newHash}`);
+    return unitId;
+  }
+  return localStorage.getItem(ACTIVE_UNIT_STORAGE_KEY);
+}
+
+export function getActiveUnitId(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(ACTIVE_UNIT_STORAGE_KEY);
+}
