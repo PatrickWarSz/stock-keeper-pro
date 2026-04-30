@@ -32,15 +32,6 @@ import {
 } from "@/components/ui/accordion";
 import heroImg from "@/assets/hero-textile.jpg";
 import painImg from "@/assets/pain-chaos.jpg";
-import { HubBadge } from "@/components/HubBadge";
-import {
-  HUB_NAME,
-  hubLandingUrl,
-  hubLoginUrl,
-  hubSignupUrl,
-  APP_SLUG,
-} from "@/lib/hub";
-import { supabase, isSupabaseConfigured } from "@/lib/supabase";
 
 /* ---------- Pequenos helpers visuais ---------- */
 
