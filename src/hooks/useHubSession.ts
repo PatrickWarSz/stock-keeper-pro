@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
-import { HUB_BASE_URL, hubLoginUrl, APP_SLUG } from "@/lib/hub";
+import {
+  HUB_BASE_URL,
+  hubLoginUrl,
+  APP_SLUG,
+  getActiveUnitId,
+} from "@/lib/hub";
 
 export type EffectiveStatus = "active" | "trial" | "blocked" | "unknown";
 
@@ -12,6 +17,7 @@ export interface HubSessionState {
   fullName: string | null;
   effectiveStatus: EffectiveStatus;
   trialDaysLeft: number | null;
+  unitId: string | null;
 }
 
 const PROGRAM_LANDING_URL = `${HUB_BASE_URL}/programas/${APP_SLUG}`;
@@ -35,6 +41,7 @@ export function useHubSession(): HubSessionState {
     fullName: null,
     effectiveStatus: "unknown",
     trialDaysLeft: null,
+    unitId: null,
   });
 
   useEffect(() => {
@@ -111,6 +118,7 @@ export function useHubSession(): HubSessionState {
         effectiveStatus,
         trialDaysLeft:
           effectiveStatus === "trial" ? access?.trial_days_left ?? null : null,
+        unitId: getActiveUnitId(),
       });
     }
 
