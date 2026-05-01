@@ -11,7 +11,6 @@ import PedidosPage from "./pages/PedidosPage";
 import FornecedoresPage from "./pages/FornecedoresPage";
 import HistoricoPage from "./pages/HistoricoPage";
 import ConfiguracoesPage from "./pages/ConfiguracoesPage";
-import LandingPage from "./pages/LandingPage";
 
 const queryClient = new QueryClient();
 
@@ -23,8 +22,8 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LandingPage />} />
             <Route element={<AppLayout />}>
+              <Route path="/" element={<Navigate to="/app/estoque" replace />} />
               <Route path="/app" element={<Navigate to="/app/estoque" replace />} />
               <Route path="/app/estoque" element={<EstoquePage />} />
               <Route path="/app/pedidos" element={<PedidosPage />} />
